@@ -1,7 +1,6 @@
 package chess;
 
 import util.Color;
-import javax.swing.ImageIcon;
 
 public class Cavalier extends Pion {
     public Cavalier() {
@@ -9,10 +8,10 @@ public class Cavalier extends Pion {
     }
     
     public Cavalier(Integer x, Integer y, Color color) {
-        super("Cavalier", 3, null, x, y, color);
+        super("Cavalier", 3, x, y, color);
     }
     
     public Cavalier(Integer pv, Integer x, Integer y, Color color) {
-        super("Cavalier", pv, null, x, y, color);
+        super("Cavalier", pv, x, y, color);
     }
 }

@@ -1,13 +1,9 @@
 package chess;
 
-import javax.swing.ImageIcon;
-
 import player.BaseHit;
 import pong.Ball;
 
-import javax.swing.*;
 import util.Color;
-import util.Utils;
 
 import java.awt.*;
 
@@ -16,7 +12,6 @@ import java.awt.*;
 public class Pion extends BaseHit{
     private String name;
     private Integer pv;
-    private ImageIcon image;
     private Integer x,y;
     private Integer width,height;
     private Color color;
@@ -32,11 +27,10 @@ public class Pion extends BaseHit{
         this.height = 40;
         
     }
-    public Pion(String name, Integer pv, ImageIcon image, Integer x, Integer y,Color color) {
+    public Pion(String name, Integer pv, Integer x, Integer y, Color color) {
         super(x, y, 40, 40);
         this.name = name;
         this.pv = pv;
-        this.image = image;
         this.x = x;
         this.y = y;
         this.width = 40;
@@ -44,11 +38,10 @@ public class Pion extends BaseHit{
         this.color = color;
         
     }
-    public Pion(String name, Integer pv, ImageIcon image, Integer x, Integer y, Integer width, Integer height, Color color) {
+    public Pion(String name, Integer pv, Integer x, Integer y, Integer width, Integer height, Color color) {
         super(x, y, width, height);
         this.name = name;
         this.pv = pv;
-        this.image = image;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -77,9 +70,6 @@ public class Pion extends BaseHit{
     }
     public Integer getPv() {
         return pv;
-    }
-    public ImageIcon getImage() {
-        return image;
     }
     public Integer getX() {
         return x;
@@ -111,11 +101,6 @@ public class Pion extends BaseHit{
     public void setName(String name) {
         this.name = name;
     }
-    public void setImage(ImageIcon image) {
-        this.image = image;
-        image=Utils.resizeIcon(image,this.width,this.height);
-
-    }
     public void setWidth(Integer width) {
         this.width = width;
     }   
@@ -138,9 +123,6 @@ public class Pion extends BaseHit{
         }
     }
 
-    public void paint(Graphics g) {
-        g.drawImage(image.getImage(), x, y, null);
-    }
 
     public void update(Ball ball) {
         if (!this.isAlive()) return;

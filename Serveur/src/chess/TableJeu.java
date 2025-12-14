@@ -10,6 +10,7 @@ import pong.Ball;
 import pong.Raquette;
 import util.Color;
 
+import serveur.ServeurUdp;
 
 public class TableJeu {
     
@@ -19,6 +20,7 @@ public class TableJeu {
     private final Integer DECAL = 40;
     private Rectangle hitbox;
     private Ball ball;
+    private ServeurUdp serveurUdp;
     
 
     public TableJeu() {
@@ -49,6 +51,10 @@ public class TableJeu {
  
     public Integer getSize() {
         return size;
+    }
+
+    public void setServeurUdp(ServeurUdp serveurUdp) {
+        this.serveurUdp = serveurUdp;
     }
 
     public void setSize(Integer size) {
@@ -170,13 +176,6 @@ public class TableJeu {
         }
     }
 
-    public void paint(Graphics g){
-        g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-        player1.paint(g);
-        player2.paint(g);
-        ball.paint(g);
-    }
-
     public void update() {
         ball.move();
         if (ball.getHitbox().getY() <= hitbox.getY() || ball.getHitbox().getY() + ball.getDiameter() >= hitbox.getY() + hitbox.getHeight()) {
@@ -185,12 +184,72 @@ public class TableJeu {
         if (ball.getHitbox().getX() <= hitbox.getX() || ball.getHitbox().getX() + ball.getDiameter() >= hitbox.getX() + hitbox.getWidth()) {
             ball.reverseX();
         }
-        
+        serveurUdp.sendToAll("BALL "+ball.getX()+" "+ball.getY());
         player1.update(ball);
         player2.update(ball);
+    }
+
+    public void start(){
+        while (!isGameOver()) {
+            update();
+        }
+    }
+
+    public void setPieces(String pieces) {
+        String[] pieceArray = pieces.split(" ");
+        int size = Integer.parseInt(pieceArray[1]);
+        setSize(size);
+        Integer pion = Integer.parseInt(pieceArray[2]);
+        Integer roi = 0, reine = 0, cavalier = 0, fou = 0, tour = 0;
+        if(size >= 2){
+            roi = Integer.parseInt(pieceArray[3]);
+            reine = Integer.parseInt(pieceArray[4]);
+        }
+        if (size >= 4){
+            cavalier = Integer.parseInt(pieceArray[5]);
+        }
+        if (size >= 6){
+            fou = Integer.parseInt(pieceArray[6]);
+        }
+        if (size >= 8){
+            tour = Integer.parseInt(pieceArray[7]);
+        }
+        setPieces(pion, cavalier, fou, tour, reine, roi);
     }
 
     public boolean isGameOver(){
         return player1.hasLost() || player2.hasLost();
     }
+
+    public void processMoveMessage(String message){
+        message = message.trim();   
+        if (message.startsWith("MOVE")) {
+            System.out.println("\n\n\n\n\n\nMove reçu par le serveur \n\n\n\n\n");
+            String[] parts = message.split(" ");
+            if (parts.length >= 3) {
+                String direction = parts[1];
+                int playerNum = Integer.parseInt(parts[2]);
+                
+                Player movingPlayer = (playerNum == 1) ? player1 : player2;
+                
+                switch (direction) {
+                    case "UP":
+                        System.out.println("Déplacement vers le haut pour le joueur " + playerNum);
+                        movingPlayer.getRaquette().moveUp();
+                        break;
+                    case "DOWN":
+                        System.out.println("Déplacement vers le bas pour le joueur " + playerNum);
+                        movingPlayer.getRaquette().moveDown();
+                        break;
+                    default:
+                        System.out.println("Direction inconnue: " + direction);
+                }
+            } else {
+                System.out.println("Message MOVE invalide: " + message);
+            }
+        } else {
+            System.out.println("Message inconnu: " + message);
+        }
+    }
+
 }

@@ -65,12 +65,6 @@ public class Player {
         pieces.removeIf(pion -> pion == null || !pion.isAlive());
     }
 
-    public void paint(Graphics g) {
-        raquette.paint(g);
-        for (Pion pion : pieces) {
-            pion.paint(g);
-        }
-    }
 
     public void update(Ball ball) {
         for (Pion pion : pieces) {

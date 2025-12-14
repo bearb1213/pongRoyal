@@ -1,7 +1,6 @@
 package chess;
 
 import util.Color;
-import javax.swing.ImageIcon;
 
 public class Roi extends Pion {
     public Roi() {
@@ -9,10 +8,10 @@ public class Roi extends Pion {
     }
     
     public Roi(Integer x, Integer y, Color color) {
-        super("Roi", 10, null, x, y, color);
+        super("Roi", 10, x, y, color);
     }
     
     public Roi(Integer pv, Integer x, Integer y, Color color) {
-        super("Roi", pv, null, x, y, color);
+        super("Roi", pv, x, y, color);
     }
 }

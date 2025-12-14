@@ -1,8 +1,8 @@
 package affichage;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
 import serveur.Client;
 
 public class PanelFormPieces extends JPanel {
@@ -167,7 +167,7 @@ public class PanelFormPieces extends JPanel {
     }
     
     public void resetToDefaults() {
-        setNbPiece(16);
+        setNbPiece(8);
         setPionPv(1);
         setRoiPv(10);
         setReinePv(8);
@@ -215,7 +215,7 @@ public class PanelFormPieces extends JPanel {
             // Envoi au serveur dans un thread séparé pour ne pas bloquer l'interface
             new Thread(() -> {
                 try {
-                    client.sendMessage(message.toString());
+                    client.send(message.toString());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

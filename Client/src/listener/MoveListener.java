@@ -1,6 +1,5 @@
 package listener;
 
-import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import player.Player;
@@ -28,7 +27,7 @@ public class MoveListener implements  KeyListener  {
             case KeyEvent.VK_UP:
                 new Thread(() -> {
                     try {
-                        client.sendMessage("MOVE UP "+player.getNumPlayer()+"\n");
+                        client.send("MOVE UP "+player.getNumPlayer()+"\n");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -37,7 +36,7 @@ public class MoveListener implements  KeyListener  {
             case KeyEvent.VK_DOWN:
                 new Thread(() -> {
                     try {
-                        client.sendMessage("MOVE DOWN "+player.getNumPlayer()+"\n");
+                        client.send("MOVE DOWN "+player.getNumPlayer()+"\n");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -1,13 +1,12 @@
 package chess;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 import java.awt.Rectangle;
-
+import java.util.ArrayList;
 import player.Player;
 import pong.Ball;
 import pong.Raquette;
+import serveur.Client;
 import util.Color;
 
 
@@ -21,6 +20,7 @@ public class TableJeu {
     private Ball ball;
     private int numPlayer;
     private boolean pieceSet = false;
+    private Client client;
 
     public TableJeu() {
         this.ball = new Ball(200,160,10,2,2);
@@ -68,6 +68,10 @@ public class TableJeu {
     }
 
 
+    public void setClient(Client client) {
+        this.client = client;
+    }
+    
     public void setNumPlayer(int numPlayer) {
         this.numPlayer = numPlayer;
     }
@@ -96,6 +100,16 @@ public class TableJeu {
         Raquette r = new Raquette(280 + DECAL, 140 + DECAL, 10, 40, 10);
         this.player2 = new Player(name, r, new ArrayList<>(), Color.NOIR);
         player2.setNumPlayer(2);
+    }
+
+    public void setOpponentName(String name){
+        if (numPlayer == 1){
+            Raquette r = new Raquette(280 + DECAL, 140 + DECAL, 10, 40, 10);
+            this.player2 = new Player(name, r, new ArrayList<>(), Color.NOIR);
+        } else {
+            Raquette r = new Raquette(120 + DECAL, 140 + DECAL, 10, 40, 10);
+            this.player1 = new Player(name , r, new ArrayList<>(), Color.BLANC);
+        }
     }
 
     public boolean isPiecesSet() {
@@ -185,6 +199,28 @@ public class TableJeu {
         pieceSet = true;
     }
 
+    public void setPieces(String pieces) {
+        String[] pieceArray = pieces.split(" ");
+        int size = Integer.parseInt(pieceArray[1]);
+        setSize(size);
+        Integer pion = Integer.parseInt(pieceArray[2]);
+        Integer roi = 0, reine = 0, cavalier = 0, fou = 0, tour = 0;
+        if(size >= 2){
+            roi = Integer.parseInt(pieceArray[3]);
+            reine = Integer.parseInt(pieceArray[4]);
+        }
+        if (size >= 4){
+            cavalier = Integer.parseInt(pieceArray[5]);
+        }
+        if (size >= 6){
+            fou = Integer.parseInt(pieceArray[6]);
+        }
+        if (size >= 8){
+            tour = Integer.parseInt(pieceArray[7]);
+        }
+        setPieces(pion, cavalier, fou, tour, reine, roi);
+    }
+
     public void paint(Graphics g){
         g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
         player1.paint(g);
@@ -193,7 +229,6 @@ public class TableJeu {
     }
 
     public void update() {
-        ball.move();
         if (ball.getHitbox().getY() <= hitbox.getY() || ball.getHitbox().getY() + ball.getDiameter() >= hitbox.getY() + hitbox.getHeight()) {
             ball.reverseY();
         } 
@@ -210,4 +245,44 @@ public class TableJeu {
     public boolean isGameOver(){
         return player1.hasLost() || player2.hasLost();
     }
+
+    public void processMoveMessage(String message) {
+        message = message.trim();   
+        if (message.startsWith("MOVE")) {
+            System.out.println("\n\n\n\n\n\nMove reçu par le serveur \n\n\n\n\n");
+            String[] parts = message.split(" ");
+            if (parts.length >= 3) {
+                String direction = parts[1];
+                int playerNum = Integer.parseInt(parts[2]);
+                
+                Player movingPlayer = (playerNum == 1) ? player1 : player2;
+                
+                switch (direction) {
+                    case "UP":
+                        System.out.println("Déplacement vers le haut pour le joueur " + playerNum);
+                        movingPlayer.getRaquette().moveUp();
+                        break;
+                    case "DOWN":    
+                        System.out.println("Déplacement vers le bas pour le joueur " + playerNum);
+                        movingPlayer.getRaquette().moveDown();
+                        break;
+                    default:
+                        System.out.println("Direction inconnue: " + direction);
+                }
+            } else {
+                System.out.println("Message MOVE invalide: " + message);
+            }
+        } else if (message.startsWith("BALL")) {
+            String[] parts = message.split(" ");
+            if (parts.length >= 3) {
+                int ballX = Integer.parseInt(parts[1]);
+                int ballY = Integer.parseInt(parts[2]);
+                ball.setX(ballX);
+                ball.setY(ballY);
+            } else {
+                System.out.println("Message BALL invalide: " + message);
+            }
+        }
+    } 
+
 }

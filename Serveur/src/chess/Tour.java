@@ -1,7 +1,6 @@
 package chess;
 
 import util.Color;
-import javax.swing.ImageIcon;
 
 public class Tour extends Pion {
     public Tour() {
@@ -9,10 +8,10 @@ public class Tour extends Pion {
     }
     
     public Tour(Integer x, Integer y, Color color) {
-        super("Tour", 3, null, x, y, color);
+        super("Tour", 3, x, y, color);
     }
     
     public Tour(Integer pv, Integer x, Integer y, Color color) {
-        super("Tour", pv, null, x, y, color);
+        super("Tour", pv, x, y, color);
     }
 }
