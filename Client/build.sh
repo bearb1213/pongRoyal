@@ -82,6 +82,12 @@ else
     exit 1
 fi
 
+if cp -r "$IMAGE_DIR" "$BUILD_DIR/"; then
+    echo -e "${GREEN}✓ Répertoire d'images copié dans '$BUILD_DIR'${NC}"
+else
+    echo -e "${RED}✗ Erreur lors de la copie du répertoire d'images${NC}"
+    exit 1
+fi
 
 echo -e "${BLUE}=== Terminé avec succès ===${NC}"
 

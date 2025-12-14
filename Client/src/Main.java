@@ -1,7 +1,7 @@
 import affichage.FrameGame;
-import serveur.Serveur;
 public class Main {
     public static void main(String[] args) {
-        Serveur serveur = new Serveur();
+        FrameGame frame = new FrameGame();
+        frame.setVisible(true);
     }
 }

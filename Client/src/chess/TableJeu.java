@@ -19,12 +19,12 @@ public class TableJeu {
     private final Integer DECAL = 40;
     private Rectangle hitbox;
     private Ball ball;
-    
+    private int numPlayer;
+    private boolean pieceSet = false;
 
     public TableJeu() {
         this.ball = new Ball(200,160,10,2,2);
     }
-
     public TableJeu(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
@@ -50,7 +50,30 @@ public class TableJeu {
     public Integer getSize() {
         return size;
     }
+    
+    public boolean isFull(){
+        return player1 != null && player2 != null;
+    }
 
+    public boolean isPlayer1Set(){
+        return player1 != null;
+    }
+
+    public boolean isPlayer2Set(){
+        return player2 != null;
+    }
+
+    public boolean isSizeSet(){
+        return size != null && size > 0 && size <= 8 && size%2 == 0;
+    }
+
+
+    public void setNumPlayer(int numPlayer) {
+        this.numPlayer = numPlayer;
+    }
+    public int getNumPlayer() {
+        return numPlayer;
+    }   
     public void setSize(Integer size) {
         this.size = size;
         createTableJeu();
@@ -75,23 +98,13 @@ public class TableJeu {
         player2.setNumPlayer(2);
     }
 
-    public boolean isFull(){
-        return player1 != null && player2 != null;
+    public boolean isPiecesSet() {
+        return pieceSet;
     }
 
-    public boolean isPlayer1Set(){
-        return player1 != null;
+    public void setPiecesSet(boolean isPieceSet) {
+        this.pieceSet = isPieceSet;
     }
-
-    public boolean isPlayer2Set(){
-        return player2 != null;
-    }
-
-    public boolean isSizeSet(){
-        return size != null && size > 0 && size <= 8 && size%2 == 0;
-    }
-
-
 
     public void createDame(Integer pv){
         player1.getPieces().add(new Reine(pv,0 + DECAL,120 + DECAL,Color.BLANC));
@@ -127,6 +140,7 @@ public class TableJeu {
 
 
     public void setPieces(Integer pionPv , Integer cavalierPv , Integer fouPv , Integer tourPv , Integer reinePv , Integer roiPv) {
+        
         if (size%2 != 0) throw new IllegalArgumentException("Nombre paire");
         if (size <= 0) throw new IllegalArgumentException("Nombre doit etre superieur 0");
         if (size > 8) throw new IllegalArgumentException("Nombre doit etre inferieur ou egal 8");
@@ -168,6 +182,7 @@ public class TableJeu {
                 createDame(reinePv);
                 break;
         }
+        pieceSet = true;
     }
 
     public void paint(Graphics g){
@@ -186,6 +201,8 @@ public class TableJeu {
             ball.reverseX();
         }
         
+
+
         player1.update(ball);
         player2.update(ball);
     }

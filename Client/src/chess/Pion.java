@@ -26,10 +26,12 @@ public class Pion extends BaseHit{
         super(0, 0, 40, 40);
         this.name = "Pion";
         this.pv = 1;
+        this.image = new ImageIcon("images/pionb.png");
         this.x = 0;
         this.y = 0;
         this.width = 40;
         this.height = 40;
+        image=Utils.resizeIcon(image,this.width,this.height);
         
     }
     public Pion(String name, Integer pv, ImageIcon image, Integer x, Integer y,Color color) {
@@ -42,6 +44,7 @@ public class Pion extends BaseHit{
         this.width = 40;
         this.height = 40;
         this.color = color;
+        if (image!=null) image=Utils.resizeIcon(image,this.width,this.height);
         
     }
     public Pion(String name, Integer pv, ImageIcon image, Integer x, Integer y, Integer width, Integer height, Color color) {
@@ -54,6 +57,7 @@ public class Pion extends BaseHit{
         this.width = width;
         this.height = height;
         this.color = color;
+        if (image!=null)  image=Utils.resizeIcon(image,this.width,this.height);
 
     }
     public Pion(String name , Integer pv , Color color,Integer x, Integer y) {
@@ -61,12 +65,17 @@ public class Pion extends BaseHit{
         this.name = name;
         this.pv = pv;
         
-        
+        if (color == Color.BLANC) {
+            this.image = new ImageIcon("images/pionb.png");
+        } else {
+            this.image = new ImageIcon("images/pionn.png");
+        }
         this.x = x;
         this.y = y;
         this.width = 40;
         this.height = 40;
         this.color = color;
+        image=Utils.resizeIcon(image,this.width,this.height);
 
     }
     
